@@ -7,3 +7,4 @@ On detection of the trailing edge (as the switch is released) change the state o
 
 Change the state of a GPIO Output pin that drives a Buzzer via direct from a GPIO pin to Ground.
 
+https://github.com/MikeCoutts/pi-simple-switch/blob/main/images/IMG_20211103_225959778.jpg
