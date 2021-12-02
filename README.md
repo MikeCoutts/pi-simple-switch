@@ -1,26 +1,32 @@
 # pi-simple-switch
-A Simple Raspberry PI GPIO Input from a momentary switch to drive an LED via a GPIO Output
+A Simple Raspberry PI GPIO Input from a momentary switch to drive console output
 
 Read the status of a momentary switch on GPIO Pin 16 (note the use of a Blue LED in place of a 10k Ohm Pull down resistor)
 
-On detection of the trailing edge (as the switch is released) change the state of a variable and various LED's tied to GPIO PINs
-
-Change the state of a GPIO Output pin that drives a Buzzer via direct input from a GPIO pin to Ground.
+On detection of the trailing edge (as the switch is released) output "Button Released" and the Current DATETIME
 
 ![Alt text](https://github.com/MikeCoutts/pi-simple-switch/blob/main/images/IMG_20211103_225959778.jpg?raw=true "Traffic Lights")
 
-# Simple Rasbpery Pi Bread Board wiring for this project
-[Buzzer](https://www.amazon.com/dp/B07S85WRSZ?psc=1&ref=ppx_yo2_dt_b_product_details) ground on 5V GND line with +ve into GPIO 23
-Blue (GPIO 17), Green (GPIO 23) and Red (GPIO 22) connected to White Led BGR Anodes via 10K Ohm Resitors with Cathod to Ground.
-Red (GPIO 13), Amber/Yellow (GPIO 19), Green (GPIO 26) connected to Red/Amber/Green LED's via 10K Ohm resitors.
-10K Ohm resiter supplying power to momentary switch with a Blue line (connected to GPIO Input 16) being drawn down by a Blue LED.
+# Simple Raspberry Pi Bread Board wiring for this project
+[Buzzer](https://www.amazon.com/dp/B07S85WRSZ?psc=1&ref=ppx_yo2_dt_b_product_details) ground on 5V GND line with +ve into GPIO 23.
+
+[Multi Color LED] Blue (GPIO 17), Green (GPIO 23) and Red (GPIO 22) connected to BGR Anodes via 10K Ohm Resitors with Cathode to Ground.
+
+[Individual LED's] Red (GPIO 13), Amber/Yellow (GPIO 19), Green (GPIO 26) connected to Red/Amber/Green Anodes via 10K Ohm resitors.
+
+10K Ohm resiter supplying power to momentary switch with a Blue line (connected to GPIO Input 16) being drawn down by the Blue LED.
 
 # Operation of the Program
-On Initialization Green LED is on for traffic progression and "Combination White" LED is Red to stop People crossing.
+import RPi.GPIO, time, signal.signal, signal.SIGINT, sys.exit and datetime.datetime
 
-Upon Button depression the Blue LED get's a simple direct power supply (via a 10K Ohm resister) with the side effect of bringing the "Button" Line Low
-Upon release the pi-simple-switch program detects the rising edge and flips from car mode to pedistrain mode:
+Define the button Input as GPIO Pin 16 and a previous_state variable
 
-Green Off, RED/Amber On and all of the combi giving a White light to pedestrians plus a screatching Buzzer for ADA.
+Define the exit handler as we will be using an infinete loop
 
-A second depression and release of the Button flips the lights back to Car Mode.
+Enter an infinite loop (while True:) where we grab the state of the switch using input = GPIO.input(button)
+
+  Upon Button depression the Blue LED get's a simple direct power supply (via a 10K Ohm resister) with the side effect of bringing the "Button" Line Low (input = True)
+
+  Upon release the program detects the rising edge (input = False) gets the currentDateTime and prints out a message to the console
+
+  On each loop update previous_input with the current input value and have a slight pause just to debounce the button press (code runs way faster than buttons)
