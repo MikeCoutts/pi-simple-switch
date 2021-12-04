@@ -17,15 +17,15 @@ BUTTON = 16
 GPIO.setup(BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 16 (button) to be an input pin and set initial value to be pulled low (off)
 previous_input = False
 
-# Define an exit handler for the program (called on Cntrl-C)
-def CntrlCHandler(signal_received, frame):
+# Define an exit handler for the program (called on Ctrl-C)
+def ctrl_c_handler(signal_received, frame):
     # Handle any cleanup here
     print('SIGINT or CTRL-C detected. Exiting gracefully')
     GPIO.cleanup()
     exit(0)
 
-# setup  the Cntrl-C handler
-signal(SIGINT, CntrlCHandler)
+# setup  the Ctrl-C handler
+signal(SIGINT, ctrl_c_handler)
 
 # infinite loop for the main thread (Use Cntrl-C to exit)
 while True:
@@ -37,8 +37,8 @@ while True:
     currentDateTime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print("Button Released at", currentDateTime)
 
-  # update prev_input value 
+  # update prev_input value
   previous_input = input
- 
+
   #slight pause to debounce
   time.sleep(0.05)
